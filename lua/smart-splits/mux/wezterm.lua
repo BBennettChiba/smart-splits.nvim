@@ -17,7 +17,15 @@ local dir_keys_wezterm_splits = {
 
 local function wezterm_exec(cmd)
   local command = vim.deepcopy(cmd)
-  table.insert(command, 1, config.wezterm_cli_path)
+  local cli_path = config.wezterm_cli_path
+  if vim.fn.has('win32') == 1 then
+    -- Running on Windows
+    cli_path = 'wezterm.exe'
+  else
+    -- Running on Unix-like systems
+    cli_path = 'wezterm'
+  end
+  table.insert(command, 1, cli_path)
   table.insert(command, 2, 'cli')
   return vim.fn.system(command)
 end
